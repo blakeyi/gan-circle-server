@@ -1,0 +1,44 @@
+syntax = "v1"
+
+type (
+	// 分两种登录方式mode区分, 微信的openid和手机号
+	LoginReq {
+		Mode   int64  `json:"mode"`
+		Openid string `json:"openid"`
+		Phone  string `json:"phone"`
+	}
+
+	LoginRes struct {
+		Uid string `json:"uid"`
+	}
+
+	UserInfo {
+		Uid           int64  `json:"uid"`
+		Name          string `json:"name"`
+		Gender        bool   `json:"gender"`
+		Age           int8   `json:"age"`
+		Height        int8   `json:"height"`
+		Weight        int8   `json:"weight"`
+		Birth         string `json:"birth"`
+		Constellation string `json:"constellation"` // 星座
+		Profession    string `json:"profession"`
+		Company       bool   `json:"company"`
+		Education     int8   `json:"education"`
+		University    int8   `json:"university"`
+		HomeProvince  string `json:"homeProvince"`
+		HomeCity      string `json:"homeCity"`
+		NowProvince   string `json:"nowProvince"`
+		NowCity       string `json:"nowCity"`
+		Phone         string `json:"phone"`
+		Cover         string `json:"cover"`
+	}
+)
+
+@server(
+	group: sys/user
+)
+
+service server-api {
+	@handler UserLogin
+	post /api/sys/user/login (LoginReq) returns (LoginRes)
+}
