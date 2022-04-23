@@ -4,6 +4,7 @@ package handler
 import (
 	"net/http"
 
+	syslogin "github.com/blakeyi/gan-circle-server/api/internal/handler/sys/login"
 	sysuser "github.com/blakeyi/gan-circle-server/api/internal/handler/sys/user"
 	"github.com/blakeyi/gan-circle-server/api/internal/svc"
 
@@ -12,12 +13,41 @@ import (
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
-		[]rest.Route{
-			{
-				Method:  http.MethodPost,
-				Path:    "/api/sys/user/login",
-				Handler: sysuser.UserLoginHandler(serverCtx),
-			},
-		},
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.CheckUrl},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/query",
+					Handler: sysuser.UserQueryHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/delete",
+					Handler: sysuser.UserDeleteHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/update",
+					Handler: sysuser.UserUpdateHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1/api/sys/user"),
+	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.CheckUrl},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/login",
+					Handler: syslogin.LoginHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/v1/api/sys"),
 	)
 }

@@ -1,5 +1,5 @@
 syntax = "v1"
 import (
-	"common/common.api"
 	"sys/user.api"
+	"sys/login.api"
 )

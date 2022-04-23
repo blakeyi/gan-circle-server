@@ -1,19 +1,10 @@
 syntax = "v1"
 
 type (
-	// 分两种登录方式mode区分, 微信的openid和手机号
-	LoginReq {
-		Mode   int64  `json:"mode"`
-		Openid string `json:"openid"`
-		Phone  string `json:"phone"`
-	}
-
-	LoginRes struct {
-		Uid string `json:"uid"`
-	}
-
 	UserInfo {
 		Uid           int64  `json:"uid"`
+		Openid        string `json:"openid"`
+		Phone         string `json:"phone"`
 		Name          string `json:"name"`
 		Gender        bool   `json:"gender"`
 		Age           int8   `json:"age"`
@@ -29,16 +20,33 @@ type (
 		HomeCity      string `json:"homeCity"`
 		NowProvince   string `json:"nowProvince"`
 		NowCity       string `json:"nowCity"`
-		Phone         string `json:"phone"`
 		Cover         string `json:"cover"`
 	}
+
+	UserQueryReq {
+		Uid           int64  `json:"uid"`
+	}
+
+	UserDeleteReq {
+		Uid           int64  `json:"uid"`
+	}
+
 )
 
 @server(
+	jwt: Auth
+	middleware: CheckUrl
 	group: sys/user
+	prefix:	/v1/api/sys/user
 )
 
 service server-api {
-	@handler UserLogin
-	post /api/sys/user/login (LoginReq) returns (LoginRes)
+	@handler UserQuery
+	post /query (UserQueryReq) returns (UserInfo)
+
+	@handler UserDelete
+	post /delete (UserDeleteReq) returns (UserInfo)
+
+	@handler UserUpdate
+	post /update (UserInfo) returns (UserInfo)
 }

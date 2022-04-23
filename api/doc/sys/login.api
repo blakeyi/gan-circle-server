@@ -1,0 +1,29 @@
+syntax = "v1"
+
+type (
+    // 分两种登录方式mode区分, 微信的openid和手机号
+    LoginReq {
+        Mode   int64  `json:"mode"`
+        Openid string `json:"openid"`
+        Phone  string `json:"phone"`
+    }
+
+    LoginRes struct {
+        Uid int64 `json:"uid"`
+        AccessToken string `json:"token"`
+        AccessExpire int64 `json:"accessExpire"`
+        RefreshAfter int64 `json:"refreshAfter"`
+    }
+)
+
+@server(
+    middleware: CheckUrl
+    group: sys/login
+    prefix:	/v1/api/sys/
+)
+
+service server-api {
+    @handler Login
+    post /login (LoginReq) returns (LoginRes)
+}
+
