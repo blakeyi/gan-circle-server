@@ -8,4 +8,11 @@ type Config struct {
 		AccessSecret string
 		AccessExpire int64
 	}
+	Mongo struct{
+		Url string
+		Db  string
+		Collections struct{
+			User string
+		}
+	}
 }

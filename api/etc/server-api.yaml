@@ -4,3 +4,8 @@ Port: 8899
 Auth:
   AccessSecret: ad879037-c7a4-4063-9236-6bfc35d54b7d
   AccessExpire: 86400
+Mongo:
+  Url: "mongodb://root:yi8316800@localhost:17017"
+  Db: "blakeyi"
+  Collections:
+    User: "users"

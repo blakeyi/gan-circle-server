@@ -49,4 +49,7 @@ service server-api {
 
 	@handler UserUpdate
 	post /update (UserInfo) returns (UserInfo)
+
+	@handler UserAdd
+	post /add (UserInfo) returns (UserInfo)
 }
